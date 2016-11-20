@@ -1,0 +1,32 @@
+<%= form_for(source_vcs_repository) do |f| %>
+  <% if source_vcs_repository.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(source_vcs_repository.errors.count, "error") %> prohibited this source_vcs_repository from being saved:</h2>
+
+      <ul>
+      <% source_vcs_repository.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :server_id %>
+    <%= f.number_field :server_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :shortname %>
+    <%= f.text_field :shortname %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

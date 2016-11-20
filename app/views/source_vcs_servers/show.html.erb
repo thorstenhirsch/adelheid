@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @source_vcs_server.name %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @source_vcs_server.url %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @source_vcs_server.user %>
+</p>
+
+<p>
+  <strong>Password:</strong>
+  <%= @source_vcs_server.password %>
+</p>
+
+<p>
+  <strong>Vcs:</strong>
+  <%= @source_vcs_server.vcs %>
+</p>
+
+<%= link_to 'Edit', edit_source_vcs_server_path(@source_vcs_server) %> |
+<%= link_to 'Back', source_vcs_servers_path %>

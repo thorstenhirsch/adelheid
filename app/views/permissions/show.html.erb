@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @permission.user_id %>
+</p>
+
+<p>
+  <strong>Application:</strong>
+  <%= @permission.application_id %>
+</p>
+
+<p>
+  <strong>Environment group:</strong>
+  <%= @permission.environment_group_id %>
+</p>
+
+<p>
+  <strong>Environment:</strong>
+  <%= @permission.environment_id %>
+</p>
+
+<p>
+  <strong>Key:</strong>
+  <%= @permission.key %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @permission.value %>
+</p>
+
+<%= link_to 'Edit', edit_permission_path(@permission) %> |
+<%= link_to 'Back', permissions_path %>

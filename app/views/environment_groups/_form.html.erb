@@ -1,0 +1,22 @@
+<%= form_for(environment_group) do |f| %>
+  <% if environment_group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(environment_group.errors.count, "error") %> prohibited this environment_group from being saved:</h2>
+
+      <ul>
+      <% environment_group.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

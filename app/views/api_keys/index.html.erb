@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Api Keys</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Name</th>
+      <th>Active</th>
+      <th>Key</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @api_keys.each do |api_key| %>
+      <tr>
+        <td><%= api_key.user_id %></td>
+        <td><%= api_key.name %></td>
+        <td><%= api_key.active %></td>
+        <td><%= api_key.key %></td>
+        <td><%= link_to 'Show', api_key %></td>
+        <td><%= link_to 'Edit', edit_api_key_path(api_key) %></td>
+        <td><%= link_to 'Destroy', api_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Api Key', new_api_key_path %>

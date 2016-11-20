@@ -1,0 +1,42 @@
+<%= form_for(configuration) do |f| %>
+  <% if configuration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(configuration.errors.count, "error") %> prohibited this configuration from being saved:</h2>
+
+      <ul>
+      <% configuration.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :use_authentication %>
+    <%= f.check_box :use_authentication %>
+  </div>
+
+  <div class="field">
+    <%= f.label :authentication_type %>
+    <%= f.text_field :authentication_type %>
+  </div>
+
+  <div class="field">
+    <%= f.label :http_user %>
+    <%= f.text_field :http_user %>
+  </div>
+
+  <div class="field">
+    <%= f.label :http_password_digest %>
+    <%= f.text_field :http_password_digest %>
+  </div>
+
+  <div class="field">
+    <%= f.label :create_artefacts_on_the_fly %>
+    <%= f.check_box :create_artefacts_on_the_fly %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

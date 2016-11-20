@@ -1,0 +1,2 @@
+class Artefact < ApplicationRecord
+end

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Server:</strong>
+  <%= @source_vcs_repository.server_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @source_vcs_repository.name %>
+</p>
+
+<p>
+  <strong>Shortname:</strong>
+  <%= @source_vcs_repository.shortname %>
+</p>
+
+<%= link_to 'Edit', edit_source_vcs_repository_path(@source_vcs_repository) %> |
+<%= link_to 'Back', source_vcs_repositories_path %>

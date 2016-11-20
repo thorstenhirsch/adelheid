@@ -1,0 +1,12 @@
+#!/bin/env ruby
+#
+# adelheid client
+#
+
+require 'rest-client'
+require 'json'
+
+url = 'http://localhost:3000/api'
+response = RestClient.get(url)
+JSON.parse(response)
+

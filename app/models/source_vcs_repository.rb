@@ -1,0 +1,2 @@
+class SourceVcsRepository < ApplicationRecord
+end

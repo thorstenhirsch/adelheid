@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @user_application.user_id %>
+</p>
+
+<p>
+  <strong>Application:</strong>
+  <%= @user_application.application_id %>
+</p>
+
+<p>
+  <strong>Environment spec:</strong>
+  <%= @user_application.environment_spec %>
+</p>
+
+<%= link_to 'Edit', edit_user_application_path(@user_application) %> |
+<%= link_to 'Back', user_applications_path %>

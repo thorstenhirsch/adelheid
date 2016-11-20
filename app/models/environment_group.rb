@@ -1,0 +1,2 @@
+class EnvironmentGroup < ApplicationRecord
+end

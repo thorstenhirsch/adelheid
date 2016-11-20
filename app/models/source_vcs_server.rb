@@ -1,0 +1,2 @@
+class SourceVcsServer < ApplicationRecord
+end

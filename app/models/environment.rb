@@ -1,0 +1,2 @@
+class Environment < ApplicationRecord
+end

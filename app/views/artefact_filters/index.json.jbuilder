@@ -1,0 +1,1 @@
+json.array! @artefact_filters, partial: 'artefact_filters/artefact_filter', as: :artefact_filter

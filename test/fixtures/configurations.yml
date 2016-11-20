@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  use_authentication: false
+  authentication_type: MyString
+  http_user: MyString
+  http_password_digest: MyString
+  create_artefacts_on_the_fly: false
+
+two:
+  use_authentication: false
+  authentication_type: MyString
+  http_user: MyString
+  http_password_digest: MyString
+  create_artefacts_on_the_fly: false

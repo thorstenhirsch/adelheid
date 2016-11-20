@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Timestamp:</strong>
+  <%= @deployment.timestamp %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @deployment.notes %>
+</p>
+
+<%= link_to 'Edit', edit_deployment_path(@deployment) %> |
+<%= link_to 'Back', deployments_path %>

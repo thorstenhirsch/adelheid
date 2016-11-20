@@ -1,0 +1,1 @@
+json.partial! "artefact_filters/artefact_filter", artefact_filter: @artefact_filter

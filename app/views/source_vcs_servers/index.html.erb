@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Source Vcs Servers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Url</th>
+      <th>User</th>
+      <th>Password</th>
+      <th>Vcs</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @source_vcs_servers.each do |source_vcs_server| %>
+      <tr>
+        <td><%= source_vcs_server.name %></td>
+        <td><%= source_vcs_server.url %></td>
+        <td><%= source_vcs_server.user %></td>
+        <td><%= source_vcs_server.password %></td>
+        <td><%= source_vcs_server.vcs %></td>
+        <td><%= link_to 'Show', source_vcs_server %></td>
+        <td><%= link_to 'Edit', edit_source_vcs_server_path(source_vcs_server) %></td>
+        <td><%= link_to 'Destroy', source_vcs_server, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Source Vcs Server', new_source_vcs_server_path %>

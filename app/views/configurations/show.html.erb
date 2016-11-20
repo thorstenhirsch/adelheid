@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Use authentication:</strong>
+  <%= @configuration.use_authentication %>
+</p>
+
+<p>
+  <strong>Authentication type:</strong>
+  <%= @configuration.authentication_type %>
+</p>
+
+<p>
+  <strong>Http user:</strong>
+  <%= @configuration.http_user %>
+</p>
+
+<p>
+  <strong>Http password digest:</strong>
+  <%= @configuration.http_password_digest %>
+</p>
+
+<p>
+  <strong>Create artefacts on the fly:</strong>
+  <%= @configuration.create_artefacts_on_the_fly %>
+</p>
+
+<%= link_to 'Edit', edit_configuration_path(@configuration) %> |
+<%= link_to 'Back', configurations_path %>

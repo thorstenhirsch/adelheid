@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Application:</strong>
+  <%= @artefact_filter.application_id %>
+</p>
+
+<p>
+  <strong>Key:</strong>
+  <%= @artefact_filter.key %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @artefact_filter.value %>
+</p>
+
+<%= link_to 'Edit', edit_artefact_filter_path(@artefact_filter) %> |
+<%= link_to 'Back', artefact_filters_path %>

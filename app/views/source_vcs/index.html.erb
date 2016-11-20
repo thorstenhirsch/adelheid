@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Source Vcs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Repository</th>
+      <th>Branch</th>
+      <th>Tag</th>
+      <th>Revision</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @source_vcs.each do |source_vc| %>
+      <tr>
+        <td><%= source_vc.repository_id %></td>
+        <td><%= source_vc.branch %></td>
+        <td><%= source_vc.tag %></td>
+        <td><%= source_vc.revision %></td>
+        <td><%= link_to 'Show', source_vc %></td>
+        <td><%= link_to 'Edit', edit_source_vc_path(source_vc) %></td>
+        <td><%= link_to 'Destroy', source_vc, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Source Vc', new_source_vc_path %>
