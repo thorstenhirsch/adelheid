@@ -1,2 +1,0 @@
-class ArtefactType < ApplicationRecord
-end

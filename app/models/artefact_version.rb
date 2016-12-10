@@ -1,2 +1,0 @@
-class ArtefactVersion < ApplicationRecord
-end

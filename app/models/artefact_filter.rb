@@ -1,2 +1,0 @@
-class ArtefactFilter < ApplicationRecord
-end

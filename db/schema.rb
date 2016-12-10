@@ -30,45 +30,45 @@ ActiveRecord::Schema.define(version: 20161120115331) do
     t.index ["name"], name: "index_applications_on_name"
   end
 
-  create_table "artefact_filters", force: :cascade do |t|
+  create_table "artifact_filters", force: :cascade do |t|
     t.integer  "application_id"
     t.string   "key"
     t.string   "value"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.index ["key"], name: "index_artefact_filters_on_key"
+    t.index ["key"], name: "index_artifact_filters_on_key"
   end
 
-  create_table "artefact_types", force: :cascade do |t|
+  create_table "artifact_types", force: :cascade do |t|
     t.string   "name"
     t.integer  "application_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.index ["application_id", "name"], name: "index_artefact_types_on_application_id_and_name", unique: true
-    t.index ["name"], name: "index_artefact_types_on_name"
+    t.index ["application_id", "name"], name: "index_artifact_types_on_application_id_and_name", unique: true
+    t.index ["name"], name: "index_artifact_types_on_name"
   end
 
-  create_table "artefact_versions", force: :cascade do |t|
-    t.integer  "artefact_id"
+  create_table "artifact_versions", force: :cascade do |t|
+    t.integer  "artifact_id"
     t.string   "version"
     t.integer  "version_number"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.index ["artefact_id", "version_number"], name: "index_artefact_versions_on_artefact_id_and_version_number", unique: true
-    t.index ["artefact_id"], name: "index_artefact_versions_on_artefact_id"
+    t.index ["artifact_id", "version_number"], name: "index_artifact_versions_on_artifact_id_and_version_number", unique: true
+    t.index ["artifact_id"], name: "index_artifact_versions_on_artifact_id"
   end
 
-  create_table "artefacts", force: :cascade do |t|
+  create_table "artifacts", force: :cascade do |t|
     t.string   "name"
-    t.integer  "artefact_type_id"
-    t.integer  "artefact_version_id"
+    t.integer  "artifact_type_id"
+    t.integer  "artifact_version_id"
     t.integer  "application_id"
     t.text     "description"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.index ["application_id", "name"], name: "index_artefacts_on_application_id_and_name", unique: true
-    t.index ["application_id"], name: "index_artefacts_on_application_id"
-    t.index ["name"], name: "index_artefacts_on_name"
+    t.index ["application_id", "name"], name: "index_artifacts_on_application_id_and_name", unique: true
+    t.index ["application_id"], name: "index_artifacts_on_application_id"
+    t.index ["name"], name: "index_artifacts_on_name"
   end
 
   create_table "configurations", force: :cascade do |t|
@@ -83,16 +83,16 @@ ActiveRecord::Schema.define(version: 20161120115331) do
 
   create_table "deployments", force: :cascade do |t|
     t.datetime "timestamp"
-    t.integer  "artefact_id"
-    t.integer  "artefact_version_id"
+    t.integer  "artifact_id"
+    t.integer  "artifact_version_id"
     t.integer  "environment_id"
     t.text     "notes"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.index ["artefact_id", "artefact_version_id", "environment_id"], name: "index_deployments_on_artefact_artefactversion_environment", unique: true
-    t.index ["artefact_id", "artefact_version_id"], name: "index_deployments_on_artefact_id_and_artefact_version_id"
-    t.index ["artefact_id", "environment_id"], name: "index_deployments_on_artefact_id_and_environment_id"
-    t.index ["artefact_id"], name: "index_deployments_on_artefact_id"
+    t.index ["artifact_id", "artifact_version_id", "environment_id"], name: "index_deployments_on_artifact_artifactversion_environment", unique: true
+    t.index ["artifact_id", "artifact_version_id"], name: "index_deployments_on_artifact_id_and_artifact_version_id"
+    t.index ["artifact_id", "environment_id"], name: "index_deployments_on_artifact_id_and_environment_id"
+    t.index ["artifact_id"], name: "index_deployments_on_artifact_id"
     t.index ["environment_id"], name: "index_deployments_on_environment_id"
   end
 
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 20161120115331) do
 
   create_table "sources", force: :cascade do |t|
     t.string   "type"
-    t.integer  "artefact_id"
+    t.integer  "artifact_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

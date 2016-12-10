@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :user_applications
-  resources :artefact_filters
+  resources :artifact_filters
   resources :api_keys
   resources :users
   resources :permissions
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :deployments
   resources :environments
   resources :environment_groups
-  resources :artefacts
+  resources :artifacts
 
   get 'dashboard', to: 'dashboard#index'
 

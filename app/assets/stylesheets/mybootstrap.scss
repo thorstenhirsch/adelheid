@@ -1,0 +1,41 @@
+/* color scheme */
+$lightblue:  hsla(185%, 79%, 95%, 1);
+$lightgreen: hsla(117%, 94%, 79%, 1);
+$green:      hsla(117%, 24%, 52%, 1);
+$browngreen: hsla(78%, 22%, 29%, 1);
+$darkbrown:  hsla(94%, 13%, 21%, 1);
+$grey:       #899aa2;
+$white:      white;
+
+/* overriding bootstrap variables... */
+// Grayscale and brand colors for use across Bootstrap.
+$gray-dark:                 #373a3c;
+$gray:                      #55595c;
+$gray-light:                #818a91;
+$gray-lighter:              #eceeef;
+$gray-lightest:             #f7f7f9;
+
+$brand-primary:             #0275d8;
+$brand-success:             #5cb85c;
+$brand-info:                #5bc0de;
+$brand-warning:             #f0ad4e;
+$brand-danger:              #d9534f;
+$brand-inverse:             $gray-dark;
+
+$body-bg:    $grey;
+$body-color: $white;
+
+// Options
+$enable-flex:               false;
+$enable-rounded:            true;
+$enable-shadows:            false;
+$enable-gradients:          false;
+$enable-transitions:        false;
+$enable-hover-media-query:  false;
+$enable-grid-classes:       true;
+$enable-print-styles:       true;
+
+/* importing libs... */
+@import "tether";
+@import "tether-theme-basic";
+@import "bootstrap";

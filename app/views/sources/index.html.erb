@@ -6,7 +6,7 @@
   <thead>
     <tr>
       <th>Type</th>
-      <th>Artefact</th>
+      <th>Artifact</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -15,7 +15,7 @@
     <% @sources.each do |source| %>
       <tr>
         <td><%= source.type %></td>
-        <td><%= source.artefact_id %></td>
+        <td><%= source.artifact_id %></td>
         <td><%= link_to 'Show', source %></td>
         <td><%= link_to 'Edit', edit_source_path(source) %></td>
         <td><%= link_to 'Destroy', source, method: :delete, data: { confirm: 'Are you sure?' } %></td>

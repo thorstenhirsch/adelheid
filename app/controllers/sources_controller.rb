@@ -69,6 +69,6 @@ class SourcesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def source_params
-      params.require(:source).permit(:type, :artefact_id)
+      params.require(:source).permit(:type, :artifact_id)
     end
 end

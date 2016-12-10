@@ -1,3 +1,30 @@
 // Place all the styles related to the Deployments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.envgroup {
+  margin-right:auto;
+  margin-left:auto;
+  padding-left:15px;
+  padding-right:15px;
+  border:groove;
+  margin-bottom:20px;
+  border-color:orange;
+  padding-left:10px;
+}
+
+.environment {
+  max-width:35em;
+  font-size:0.86em;
+  border:dashed;
+  border-color:yellow;
+  padding-right:3px;
+}
+
+.filter > * {
+  float:left;
+}
+
+.filter > .caret {
+  border-width:1em;
+}

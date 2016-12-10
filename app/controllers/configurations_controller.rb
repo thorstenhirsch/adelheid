@@ -69,6 +69,6 @@ class ConfigurationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def configuration_params
-      params.require(:configuration).permit(:use_authentication, :authentication_type, :http_user, :http_password_digest, :create_artefacts_on_the_fly)
+      params.require(:configuration).permit(:use_authentication, :authentication_type, :http_user, :http_password_digest, :create_artifacts_on_the_fly)
     end
 end

@@ -7,8 +7,10 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
+      # custom colors
+      # environment groups
       # t.boolean :use_authentication
       # t.string :authentication_type
       # t.string :http_user
       # t.string :http_password_digest
-      # t.boolean :create_artefacts_on_the_fly
+      # t.boolean :create_artifacts_on_the_fly

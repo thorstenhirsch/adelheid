@@ -10,8 +10,18 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- * removed: *= require_tree .
  * removed: *= require_self
+ *= require mybootstrap
+ *= require_tree .
  */
-@import "bootstrap";
 
+/* color scheme */
+$lightblue:  hsla(185%, 79%, 95%, 1);
+$lightgreen: hsla(117%, 94%, 79%, 1);
+$green:      hsla(117%, 24%, 52%, 1);
+$browngreen: hsla(78%, 22%, 29%, 1);
+$darkbrown:  hsla(94%, 13%, 21%, 1);
+$grey:       #899aa2;
+$white:      white;
+
+/* importing libs... */

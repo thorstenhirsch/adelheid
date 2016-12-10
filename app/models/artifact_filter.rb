@@ -1,0 +1,2 @@
+class ArtifactFilter < ApplicationRecord
+end

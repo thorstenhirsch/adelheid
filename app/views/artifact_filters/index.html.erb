@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Artifact Filters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Application</th>
+      <th>Key</th>
+      <th>Value</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @artifact_filters.each do |artifact_filter| %>
+      <tr>
+        <td><%= artifact_filter.application_id %></td>
+        <td><%= artifact_filter.key %></td>
+        <td><%= artifact_filter.value %></td>
+        <td><%= link_to 'Show', artifact_filter %></td>
+        <td><%= link_to 'Edit', edit_artifact_filter_path(artifact_filter) %></td>
+        <td><%= link_to 'Destroy', artifact_filter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Artifact Filter', new_artifact_filter_path %>
