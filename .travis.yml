@@ -1,3 +1,11 @@
 language: ruby
 rvm:
     - 2.3.3
+services:
+    - mongodb
+    - mysql
+before_install:
+      - mysql -e 'CREATE DATABASE myapp_test;'
+script:
+      - bundle exec rails db:migrate --trace RAILS_ENV=test
+      - bundle exec rake db:test:prepare
