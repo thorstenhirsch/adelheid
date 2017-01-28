@@ -78,3 +78,14 @@ Deployment data can be provided to adelheid in the following ways:
 Your browser will display new deployments instantly, since it opens a web-
 socket connection that pushes new events to the browser in realtime. This
 feature is based on RnR's ActiveCable.
+
+# Adelheid in Production
+You must provide some environment variables in order to run a secure Adelheid server:
+
+   * devise_secret_key
+   * devise_mailer_sender
+
+Adelheid's webserver is Puma, which comes with Ruby-on-Rails 5.x. It can handle the
+traffic of up to 50 users pretty well, maybe even 100 users. However if you have
+even more users you might want to switch to Nginx or Apache with Passenger.
+
