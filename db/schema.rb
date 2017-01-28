@@ -27,7 +27,14 @@ ActiveRecord::Schema.define(version: 20161120115331) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_applications_on_name"
+    t.index ["name"], name: "index_applications_on_name", unique: true
+  end
+
+  create_table "artifact_categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_artifact_categories_on_name", unique: true
   end
 
   create_table "artifact_filters", force: :cascade do |t|
@@ -41,11 +48,11 @@ ActiveRecord::Schema.define(version: 20161120115331) do
 
   create_table "artifact_types", force: :cascade do |t|
     t.string   "name"
+    t.integer  "artifact_category_id"
     t.integer  "application_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.index ["application_id", "name"], name: "index_artifact_types_on_application_id_and_name", unique: true
-    t.index ["name"], name: "index_artifact_types_on_name"
   end
 
   create_table "artifact_versions", force: :cascade do |t|
@@ -83,12 +90,15 @@ ActiveRecord::Schema.define(version: 20161120115331) do
 
   create_table "deployments", force: :cascade do |t|
     t.datetime "timestamp"
+    t.integer  "application_id"
     t.integer  "artifact_id"
     t.integer  "artifact_version_id"
     t.integer  "environment_id"
     t.text     "notes"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.index ["application_id", "environment_id"], name: "index_deployments_on_application_id_and_environment_id"
+    t.index ["application_id"], name: "index_deployments_on_application_id"
     t.index ["artifact_id", "artifact_version_id", "environment_id"], name: "index_deployments_on_artifact_artifactversion_environment", unique: true
     t.index ["artifact_id", "artifact_version_id"], name: "index_deployments_on_artifact_id_and_artifact_version_id"
     t.index ["artifact_id", "environment_id"], name: "index_deployments_on_artifact_id_and_environment_id"
@@ -107,11 +117,13 @@ ActiveRecord::Schema.define(version: 20161120115331) do
 
   create_table "environments", force: :cascade do |t|
     t.string   "name"
+    t.integer  "environment_group_id"
     t.integer  "number"
     t.string   "color"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_environments_on_name", unique: true
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.index ["name", "environment_group_id"], name: "index_environments_on_name_and_environment_group_id", unique: true
+    t.index ["name"], name: "index_environments_on_name"
   end
 
   create_table "permissions", force: :cascade do |t|
@@ -126,8 +138,19 @@ ActiveRecord::Schema.define(version: 20161120115331) do
     t.index ["user_id", "application_id"], name: "index_permissions_on_user_id_and_application_id"
     t.index ["user_id", "environment_group_id"], name: "index_permissions_on_user_id_and_environment_group_id"
     t.index ["user_id", "environment_id"], name: "index_permissions_on_user_id_and_environment_id"
-    t.index ["user_id", "key"], name: "index_permissions_on_user_id_and_key"
+    t.index ["user_id", "key"], name: "index_permissions_on_user_id_and_key", unique: true
     t.index ["user_id"], name: "index_permissions_on_user_id"
+  end
+
+  create_table "properties", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "application_id"
+    t.boolean  "show"
+    t.integer  "number"
+    t.string   "xpath"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["application_id", "name"], name: "index_properties_on_application_id_and_name", unique: true
   end
 
   create_table "source_vcs", force: :cascade do |t|
@@ -165,16 +188,6 @@ ActiveRecord::Schema.define(version: 20161120115331) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "user_applications", force: :cascade do |t|
-    t.string   "user_id"
-    t.string   "application_id"
-    t.text     "environment_spec"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.index ["user_id", "application_id"], name: "index_user_applications_on_user_id_and_application_id", unique: true
-    t.index ["user_id"], name: "index_user_applications_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string   "firstname"
     t.string   "lastname"
@@ -193,6 +206,16 @@ ActiveRecord::Schema.define(version: 20161120115331) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
+  create_table "users_applications", force: :cascade do |t|
+    t.string   "user_id"
+    t.string   "application_id"
+    t.text     "environment_spec"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["user_id", "application_id"], name: "index_users_applications_on_user_id_and_application_id", unique: true
+    t.index ["user_id"], name: "index_users_applications_on_user_id"
   end
 
 end

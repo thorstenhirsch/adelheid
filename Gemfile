@@ -3,8 +3,10 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
-# Use sqlite3 as the database for Active Record
+# persistency:
+#gem 'pg'
 gem 'sqlite3'
+gem 'mongo' # mongo is the basic driver, mongoid a complete orm like ActiveRecord
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
@@ -33,6 +35,12 @@ gem 'jbuilder', '~> 2.5'
 # devise for user auth
 gem 'devise'
 
+# parse input xml and xpath expressions for bson-to-xml
+gem 'nokogiri'
+
+# job backend
+gem 'sucker_punch', '~> 2.0'
+
 # bootstrap (no need to use bootstrap-sass anymore, because sass is now the default)
 gem 'bootstrap', '~> 4.0.0.alpha5'
 gem 'chart-js-rails'
@@ -43,13 +51,12 @@ gem 'react-rails'
 gem 'lodash-rails'
 
 # query mongodb with graphql
-gem 'mongo', '~> 2.4'
-gem 'graphql'
+#gem 'graphql'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  # for bin/send_deployment (test client)
+  # for bin/adc
   gem 'rest-client'
 end
 

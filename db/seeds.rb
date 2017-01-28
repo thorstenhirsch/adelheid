@@ -6,6 +6,12 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+ArtifactCategory.create!( name: "file" )
+ArtifactCategory.create!( name: "db" )
+
+Configuration.set("applications", 0)
+Configuration.set("default_application_name", "default")
+Configuration.set("environment_groups", 0)
 
       # custom colors
       # environment groups

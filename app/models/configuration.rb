@@ -1,6 +1,6 @@
 class Configuration < ApplicationRecord
 
-  belongs_to :user
+  belongs_to :user, optional: true
 
   # global config is implemented with class methods
   def self.set(key, value)

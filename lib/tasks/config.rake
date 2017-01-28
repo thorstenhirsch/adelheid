@@ -1,13 +1,29 @@
 namespace :config do
 
   desc 'set key=value'
-  task :set, [ :key, :value ] => :environment do |t, args|
+  task :set => :environment do |t, args|
 
-    key = args[:key]
-    value = args[:value]
+    opts = {}
+    args.extras.each { |h| opts.merge!(h) }
 
-    puts "setting #{key}=#{value}..."
+    abort 'key required' unless key = opts[:key]
+    abort 'key required' unless value = opts[:value]
+
     Configuration.set(key, value)
+    puts "set: #{key}=#{value}"
+
+  end
+
+  desc 'get key'
+  task :get => :environment do |t, args|
+
+    opts = {}
+    args.extras.each { |h| opts.merge!(h) }
+
+    abort 'key required' unless key = opts[:key]
+    value = Configuration.get(key)
+
+    puts "got: #{key}=#{value}"
 
   end
 end

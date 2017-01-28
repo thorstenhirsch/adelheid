@@ -1,0 +1,3 @@
+class ApplicationMongoRecord
+
+end

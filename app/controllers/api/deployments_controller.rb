@@ -1,6 +1,5 @@
 module Api
   class DeploymentsController < BaseController
-    before_action :restrict_access
     before_action :set_deployment, only: [:show, :edit, :update, :destroy]
 
     # GET /deployments
@@ -26,11 +25,11 @@ module Api
     # POST /deployments
     # POST /deployments.json
     def create
-      @deployment = Deployment.new(deployment_params)
+      @deployment = DeploymentMongo.new(deployment_params)
 
       respond_to do |format|
         if @deployment.save
-          format.json { render :show, status: :created, location: @deployment }
+          format.json { render json: { status: :created, mongo_id: @deployment.mongo_id } }
         else
           format.json { render json: @deployment.errors, status: :unprocessable_entity }
         end
@@ -66,7 +65,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def deployment_params
-        params.require(:deployment).permit(:timestamp, :notes)
+        params.require(:deployment).permit! # permit all attributes in deployment
       end
   end
 end

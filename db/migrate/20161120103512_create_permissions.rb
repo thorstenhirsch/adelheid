@@ -17,6 +17,6 @@ class CreatePermissions < ActiveRecord::Migration[5.0]
     add_index :permissions, [ :user_id, :environment_id ]
 
     # PK
-    add_index :permissions, [ :user_id, :key ], length: { key: 30 }
+    add_index :permissions, [ :user_id, :key ], length: { key: 30 }, unique: true
   end
 end

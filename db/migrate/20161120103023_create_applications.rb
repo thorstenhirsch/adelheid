@@ -7,6 +7,6 @@ class CreateApplications < ActiveRecord::Migration[5.0]
     end
 
     # PK
-    add_index :applications, :name, length: { name: 30 }
+    add_index :applications, :name, length: { name: 30 }, unique: true
   end
 end
