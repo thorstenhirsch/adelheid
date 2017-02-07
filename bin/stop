@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+
+# PID files...
+ROOT=$HOME/src/adelheid
+MONGOPID=$ROOT/tmp/mongo.pid
+MONGOLOG=$ROOT/log/mongo.log
+
+PID=`cat $MONGOPID`
+printf "stopping mongodb process $PID."
+kill $PID
+while [ 1 ]; do
+    printf "."
+    sleep 1
+    tail $MONGOLOG | grep -q dbexit
+    [ $? == 0 ] && break
+done
+printf "ok.\n"
+
+exit 0
+

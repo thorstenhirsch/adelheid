@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+#
+# deletes all deployments in mongodb's deployment collection
+# this script is part of adelheid
+#
+# MIT License
+# (c) Thorsten Hirsch, 2016
+
+require 'mongo'
+
+module VERSION
+    MAJOR = 1
+    MINOR = 0
+    PATCH = 0
+    STRING = [MAJOR, MINOR, PATCH].compact.join(".")
+end
+
+# main
+Mongo::Logger.logger.level = ::Logger::FATAL # disable debug messages
+$mongo_client = Mongo::Client.new('mongodb://127.0.0.1:27017/adelheid')
+collection = $mongo_client[:deployments]
+result = collection.delete_many {} # no filter, delete all!
+
+puts "#{result.deleted_count} documents deleted."
+
+exit
+
+
+# CONFIGFILE = ENV['HOME'] + "/.adcrc"
+# DEFAULTURL = "http://localhost:3000/api"
+# VALIDKEYS  = %w( env url key )
+# NOTREADY   = "You must set env, url, and key first."
+# BANNER =<<EOF
+# usage: (1) adc deploy <json|xml file>                                  send deployment data in json or xml format
+#        (3) adc show <id>                                               show details of deployment <id>
+#        (4) adc list [-e <environment]                                  show latest deployments (of <environment> only)
+#        (5) adc search <key>=<value> [<key>=<value> ...]                search deployments by <key>=<value> (AND <key>=<value> ...)
+#        (6) adc set env <environment>|url <server-url>|key <api-key>    set mandatory configuration
+#        (7) adc get [env|url|key]                                       get configuration
+#        (8) adc version                                                 print adc version
+# EOF
+#
+# # parse args
+# OptionParser.new do |o|
+#     o.on('-a <artifact>', 'artifact')       { |a| $artifact = a }
+#     o.on('-v <version>', 'version')         { |v| $version = v }
+#     o.on('-n <notes>', 'notes')             { |n| $notes = n }
+#     o.on('-e <environment>', 'environment') { |e| $environment = e }
+#     o.on('-d', 'debug mode')                { $debug = 1 }
+#     o.on('-h', 'help')                      { puts o; exit }
+#
+#     @args = o.parse!
+# end
+#
+# # main
+# $action = @args[0]
+# case $action
+# when 'version'
+#     puts VERSION::STRING
+# else
+#     puts BANNER
+#     abort "unknown action: #{@args[0]}" unless @args[0].nil?
+# end
+# exit
+#
+# # subs
+# BEGIN {
+# }

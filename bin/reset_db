@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#
+# drop, create, migrate, seed
+
+# load rails environment (includes loading rake and rake tasks)
+require File.expand_path("#{File.dirname(__FILE__)}/../bin/_init")
+
+%w( drop create migrate seed ).each do |t|
+  Rake::Task["db:#{t}"].invoke()
+end

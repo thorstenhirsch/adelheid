@@ -1,0 +1,134 @@
+#!/usr/bin/env ruby
+#
+# imports sample data
+
+# initialize rails & the rake function
+require File.expand_path("#{File.dirname(__FILE__)}/../bin/_init")
+
+# configuration data
+rake "config:set", key: "environment_groups", value: 1 # UPDATE
+rake "config:set", key: "applications", value: 0 # UPDATE
+# we can also specify a default name, which is being used:
+rake "config:set", key: "default_application_name", value: "EAI"
+
+# let's start with environment groups since they are the main
+# building block in the gui (when environment_groups == 1)
+rake "environment_group:add", name: "Produktion"
+rake "environment_group:add", name: "Integration"
+rake "environment_group:add", name: "Test"
+
+# now let's fill the environment_groups with environments
+rake "environment:add", name: "Produktion", group: "Produktion"
+
+# you can provide a number, which is used for sorting the blocks in the gui
+rake "environment:add", name: "INT", group: "Integration", number: 10
+rake "environment:add", name: "INT_D", group: "Integration", number: 50
+rake "environment:add", name: "INT_C", group: "Integration", number: 40
+rake "environment:add", name: "INT_B", group: "Integration", number: 30
+rake "environment:add", name: "INT_A", group: "Integration", number: 20
+
+# if you do not set a number, the number will be auto-generated (auto-increment)
+rake "environment:add", name: "TEST", group: "Test"
+rake "environment:add", name: "TEST_A", group: "Test"
+rake "environment:add", name: "TEST_B", group: "Test"
+rake "environment:add", name: "TEST_C", group: "Test"
+rake "environment:add", name: "TEST_D", group: "Test"
+
+# properties to be shown in the gui
+rake "property:add", name: "Schnittstelle", show: 1
+rake "property:add", name: "interface", show: 1
+
+# However, there's no "Schnittstelle" attribute in the deployment documents,
+# which we'll send to adelheid; instead it's built from 2 other properties.
+# We can use an xpath expression to tell adelheid how to build it:
+rake "property:update", name: "Schnittstelle", xpath: "concat(/srcsysid, ' / ', /msgtype)"
+
+# As long as we have not provided an xpath expression for an attribute,
+# adelheid expects it to be found in root with the same name, so interface
+# is expected to be found with this xpath expression: /interface
+
+# additional searchable properties (default is show: 0)
+rake "property:add", name: "deployer"
+rake "property:add", name: "developer"
+rake "property:add", name: "change_id", xpath: "/sources/map/changeset"
+
+# btw: we do not need to provide an application, because config.application==0
+# otherwise you need to add an additional parameter (application: "some_app")
+
+# we can update all the things we've added so far like this:
+rake "property:update", name: "developer", number: 10
+rake "property:update", name: "deployer", number: 20
+# the attribute called "change_id" has number 3
+
+rake "artifact_type:add", name: "map", category: "file"
+rake "artifact_type:update", name: "map", searchable: "name" # build INDEX
+
+rake "artifact_type:add", name: "mdq", category: "file"
+
+rake "artifact_type:add", name: "file", category: "file"
+rake "artifact_type:update", name: "file", searchable: "name" # build INDEX
+
+rake "artifact_type:add", name: "cnf_frame2_input", category: "db"
+rake "artifact_type:update", name: "cnf_frame2_input", searchable: "srcsysid" # build INDEX
+rake "artifact_type:update", name: "cnf_frame2_input", searchable: "msgtype" # build INDEX
+
+rake "artifact_type:add", name: "cnf_frame2_interface", category: "db"
+rake "artifact_type:update", name: "cnf_frame2_interface", searchable: "srcsysid" # build INDEX
+rake "artifact_type:update", name: "cnf_frame2_interface", searchable: "msgtype" # build INDEX
+rake "artifact_type:update", name: "cnf_frame2_interface", searchable: "interfacename" # build INDEX
+
+rake "artifact_type:add", name: "cnf_frame2_output", category: "db"
+rake "artifact_type:update", name: "cnf_frame2_interface", searchable: "interfacename" # build INDEX
+rake "artifact_type:update", name: "cnf_frame2_interface", searchable: "queue_name" # build INDEX
+rake "artifact_type:update", name: "cnf_frame2_interface", searchable: "destsysid" # build INDEX
+rake "artifact_type:update", name: "cnf_frame2_interface", searchable: "destmsgtype" # build INDEX
+
+rake "lookup_table:add", name: "users"
+rake "lookup_table:update", name: "users", from: "user_id", to: "user_name" # build INDEX
+# lookup_table has some additional tasks...
+rake "lookup_table:apply", name: "users", on: "deployer"
+rake "lookup_table:apply", name: "users", on: "developer"
+# ...which means: whenever adelheid shows a developer or a deployer,
+# it will use the users lookup_table to transform a user_id to a user_name,
+# so let's insert some data into the lookup_table:
+rake "lookup_table:insert", name: "users", user_id: "xn09789", user_name: "Thorsten Hirsch"
+rake "lookup_table:insert", name: "users", user_id: "xne3689", user_name: "Guido Mörs"
+
+# deployment can contain undefined artifact_types
+rake "config:set", key: "allow_any_artifact_type", value: 1 # UPDATE
+
+# sample user
+# we will use him in a second in order to send our first deployment to adelheid
+u = User.find_or_initialize_by(username: 'user')
+u.firstname = 'Some'
+u.lastname = 'Example'
+u.email = 'example@mail.com'
+u.password = 'password'
+u.save!
+
+ak = ApiKey.find_or_initialize_by(user_id: u.id, key: '123')
+ak.name = 'example key'
+ak.active = 1
+ak.save!
+
+puts
+puts "Now you need to do some basic configuration:"
+puts "$ adc set environment=Test"
+puts "$ adc set key=123"
+puts
+puts "After you issued these commands, you are able"
+puts "to send your first deployment to adelheid:"
+puts "$ adc deploy examples/deployment1.rb"
+puts
+puts "Enjoy adelheid!"
+
+#adc -j ' \
+#{ \
+#    id: { Schnittstelle: "SAP / Irgendwas", interface: "sap2xxx_blah" }, \
+#    files: [ "a2b_c/a2b_c.lnx", "a2b_c/foo.xsd" ], \
+#    timestamp: "2016-12-06 15:22:11", \
+#    db: { \
+#        cnf_frame2_input: { instance_step1: "Batch" }, \
+#        cnf_frame2_interface: { instance_step2: "Batch", param_free: "-notrace" } \
+#    } \
+#}'

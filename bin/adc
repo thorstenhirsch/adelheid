@@ -1,0 +1,186 @@
+#!/usr/bin/env ruby
+#
+# adelheid client
+#
+# MIT License
+# (c) Thorsten Hirsch, 2016
+
+require 'json'
+require 'optparse'
+require 'net/http'
+
+module VERSION
+  MAJOR = 1
+  MINOR = 0
+  PATCH = 0
+  STRING = [MAJOR, MINOR, PATCH].compact.join(".")
+end
+
+CONFIGFILE = ENV['HOME'] + "/.adcrc"
+DEFAULTURL = "http://localhost:3000/api"
+VALIDKEYS  = %w( env url key )
+NOTREADY   = "You must set env, url, and key first."
+BANNER =<<EOF
+usage: (1) adc deploy <json|xml|rb file>                               send deployment data in json or xml format (or a ruby hash)
+       (3) adc show <id>                                               show details of deployment <id>
+       (4) adc list [-e <environment]                                  show latest deployments (of <environment> only)
+       (5) adc search <key>=<value> [<key>=<value> ...]                search deployments by <key>=<value> (AND <key>=<value> ...)
+       (6) adc set env <environment>|url <server-url>|key <api-key>    set mandatory configuration
+       (7) adc get env|url|key                                         get configuration
+       (8) adc version                                                 print adc version
+EOF
+
+# parse args
+OptionParser.new do |o|
+  o.on('-a <artifact>', 'artifact')       { |a| $artifact = a }
+  o.on('-v <version>', 'version')         { |v| $version = v }
+  o.on('-n <notes>', 'notes')             { |n| $notes = n }
+  o.on('-e <environment>', 'environment') { |e| $environment = e }
+  o.on('-d', 'debug mode')                { $debug = 1 }
+  o.on('-h', 'help')                      { puts o; exit }
+
+  @args = o.parse!
+end
+
+# main
+$action = @args[0]
+case $action
+when 'deploy'
+  (puts BANNER; exit) if @args.size != 2
+  readconfig
+  abort NOTREADY unless $config['env'] and $config['key']
+  deploy @args[1]
+when 'list'
+  (puts BANNER; exit) if @args.size != 1
+  readconfig
+  abort NOTREADY unless $config['env'] and $config['key']
+  list
+when 'set'
+  (puts BANNER; exit) if @args.size != 3
+  abort "unknown setting: #{@args[1]}" if !VALIDKEYS.include?(@args[1])
+  readconfig
+  updateconfig(@args[1], @args[2])
+when 'get'
+  (puts BANNER; exit) if @args.size != 2
+  abort "unknown setting: #{@args[1]}" if !VALIDKEYS.include?(@args[1])
+  readconfig
+  puts $config[@args[1]]
+when 'version'
+  puts VERSION::STRING
+else
+  puts BANNER
+  abort "unknown action: #{@args[0]}" unless @args[0].nil?
+end
+exit
+
+# subs
+BEGIN {
+  def readconfig
+    File.open(CONFIGFILE, "r") do |f|
+      $config = JSON.parse(f.read)
+    end if File.file?(CONFIGFILE)
+
+    $config ||= Hash.new
+    $config['url'] ||= DEFAULTURL
+  end
+
+  def updateconfig(key, value)
+    $config[key] = value
+    File.open(CONFIGFILE, "w") do |f|
+      f.write JSON.pretty_generate($config)
+    end
+  end
+
+  def get_csrf_token
+    uri = URI($config['url']) + "/csrf_token"
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Get.new(uri)
+    request['authorization'] = "Token token=\"#{$config['key']}\""
+    reponse = http.request request
+
+    JSON.parse(response)['csrf_token']
+  end
+
+  def send_get(uri, data=nil, type=nil)
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Get.new(uri)
+    request['authorization'] = "Token token=\"#{$config['key']}\""
+
+    if type == :json
+      request['Content-Type'] = 'application/json'
+      request.body = data
+    end
+
+    http.request request
+  end
+
+  def send_post(uri, data=nil, type=nil)
+    case type
+    when :json
+      content_type = 'application/json'
+      uri += ".json"
+    when :xml
+      content_type = 'text/xml'
+      uri += ".xml"
+    end
+
+    uri = URI(uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri)
+    request['authorization'] = "Token token=\"#{$config['key']}\""
+
+    # protect from csrf attacks
+    #request['authenticity_token'] = get_csrf_token
+
+    request['Content-Type'] = content_type if defined?(content_type)
+    request.body = data unless data.nil?
+
+    http.request request
+  end
+
+  def data_and_type_from_file(file)
+    case file
+    when /\.json$/i
+      type = :json
+      data = File.read(file)
+      data = JSON.parse(data)
+      data = { deployment: data } unless data[0] == "deployment"
+      data = JSON.generate(data)
+    when /\.xml$/i
+      type = :xml
+      data = File.open(file) { |f| Nokogiri::XML(f) }
+      data = { deployment: data } unless data[0] == "deployment"
+      data = data.to_xml
+    when /\.rb$/i
+      # convert to json
+      type = :json
+      data = eval File.read(file)
+      data = { deployment: data } unless data[0] == "deployment"
+      data = JSON.generate(data)
+    else
+      abort "unknown file type"
+    end
+
+    [ data, type ]
+  end
+
+  def deploy(file)
+    uri = $config['url'] + "/deployments"
+    ( data, type ) = data_and_type_from_file(file)
+    response = send_post(uri, data, type)
+
+    if response.kind_of? Net::HTTPSuccess
+      if $debug
+        kv = JSON.parse(response.body)
+        kv.each { |k,v| puts "#{k}: #{v}" }
+      end
+    else
+      puts "ERROR: #{response.message}"
+    end
+  end
+
+  def list
+    response = send_request
+    JSON.parse(response)
+  end
+}

@@ -14,8 +14,10 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
+/mongodb_data/*
 /tmp/*
 !/log/.keep
+!/mongodb_data/.keep
 !/tmp/.keep
 
 # github's' .gitignore...

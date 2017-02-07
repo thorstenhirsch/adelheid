@@ -8,7 +8,7 @@ class DeploymentJob < ApplicationJob
     raise 'mongo_id required' unless (opts['mongo_id'] || opts[:mongo_id])
 
     doc = DeploymentMongo.find(opts['mongo_id'] || opts[:mongo_id]).first #TODO: what if multiple?
-    xml = Nokogiri::XML(doc.to_xml(root: :deployment)) # haven't found a solution without root element
+    xml = Nokogiri::XML(doc.to_xml(root: :deployment, skip_instruct: true, indent: 0)) # haven't found a solution without root element
     raise "internal error: couldn't convert bson to xml" if xml.nil?
 
     # now fetch all configured fields from doc
@@ -18,6 +18,9 @@ class DeploymentJob < ApplicationJob
     # this works like an OR expression: (technically: UNION -> Array -> [1], first only)
     # (//bookstore/book/title | //bookstore/city/zipcode/title)[1]
     # note that nokogiri currently supports XPath 1.0 only
+
+    # maybe...
+    # %m|/[^/]|g -> each prepend '/deployment'
 
     # static / required attributes
     application_name = get_application_name(opts)
@@ -35,11 +38,9 @@ class DeploymentJob < ApplicationJob
     Property.where(application: application)
               .each do |p|
       if p.xpath.present?
-        xml.root.element_children.each do |c|
-          value = c.at_xpath(p.xpath).try(:text) # user's xpath is without /deployment root
-          puts "searched for #{p.xpath} in /#{c.name}, found: #{value}" ###
-          break if value.present?
-        end
+        value = xml.at_xpath(fix_xpath(p.xpath)).try(:text) # user's xpath is without /deployment root
+        puts "searched for #{fix_xpath(p.xpath)}, found: #{value}" ###
+        break if value.present?
       else
         value = xml.at_xpath("/deployment/#{p.name}").try(:text)
         puts "searched for /deployment/#{p.name} in /#{xml.name}, found: #{value}" ###
@@ -67,5 +68,12 @@ class DeploymentJob < ApplicationJob
     # finally we've got everything we need
     deployment.save!
 
+  end
+
+  private
+
+  def fix_xpath(xpath)
+    # everything that begins with a slash except when a slash is before the slash
+    xpath.gsub %r{(?:[^/])(/[\w]+)}, "/deployment\1"
   end
 end

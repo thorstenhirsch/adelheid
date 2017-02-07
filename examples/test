@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#
+# imports sample data
+
+# initialize rails & the rake function
+require File.expand_path("#{File.dirname(__FILE__)}/../bin/_init")
+
+# configuration data
+rake "config:set", key: "applications", value: 1
+rake "config:get", key: "applications"

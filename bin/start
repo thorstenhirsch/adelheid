@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+
+ROOT=$HOME/src/adelheid
+MONGO=mongod
+
+echo "starting mongodb..."
+$MONGO --dbpath $ROOT/mongodb_data --logpath $ROOT/log/mongo.log --pidfilepath $ROOT/tmp/mongo.pid --fork
+
+
