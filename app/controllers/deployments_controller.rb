@@ -5,6 +5,7 @@ class DeploymentsController < ApplicationController
   # GET /deployments.json
   def index
     @deployments = Deployment.all
+    @environment_groups = EnvironmentGroup.all
   end
 
   # GET /deployments/1

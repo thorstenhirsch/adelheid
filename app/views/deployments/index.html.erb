@@ -1,4 +1,4 @@
-  <% @envgroup.each do |eg| %>
+  <% @environment_groups.each do |eg| %>
     <div class="container envgroup">
         <div class="row">
             <div class="col-md-12">
@@ -13,6 +13,11 @@
                     <table class="table">
                         <thead>
                             <tr>
+                              <% # mocked up...
+                                @ui_columns = Array.new
+                                @ui_columns << Hashie::Mash.new(name: 'Schnittstelle')
+                                @ui_columns << Hashie::Mash.new(name: 'interface')
+                              %>
                               <% @ui_columns.each do |c| %>
                                 <th><%= c.name %></th>
                                 <th></th>
@@ -20,7 +25,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <% @deployments[e.name].each do |d| %>
+                          <% @deployments.each do |d| %>
+                            <% next unless d.environment == e %>
                             <tr>
                               <% @ui_columns.each do |c| %>
                                 <td><%= d[c.name] %></td>

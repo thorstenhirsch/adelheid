@@ -17,8 +17,8 @@ In case you forgot an attribute or change your mind about the identifiers
 later, you can always update your settings and re-initiate a synchro nization.
 
 # Installation
-You need a recent ruby installation with the builder gem ('''gem install builder''').
-Then you can run '''build''' to install all necessary ruby modules. If every-
+You need a recent ruby installation with the bundler gem ('''gem install bundler''').
+Then you can run '''bundle''' to install all necessary ruby modules. If every-
 thing went fine '''rails s''' will start adelheid.
 
 '''bin/install''' will download & install the required software, if not available:
@@ -41,7 +41,7 @@ Let's start with your customization: you need to explain adelheid your deploy-
 ment data, e.g. setting the id by which your artifacts are distinguished. You
 also need to provide an xpath or jsonpath expression, which adelheid will use
 when parsing the deployment data. But don't worry too much about that now - you
-can change these settings later as often as you like and rebuild your database.
+can change these settings later as often as you like and rebundle your database.
 
 # The Overview
 Here you see all your environments and the latest deployments. You can search in all environments or in a
@@ -65,7 +65,7 @@ The server is based on Ruby on Rails 5 and comes with two databases:
 
 You can always change the configuration of your custom data model, like adding
 or removing searchable attributes. Adelheid will create indexes when necessary
-and rebuild the entire postgresql database based on the mongodb data.
+and rebundle the entire postgresql database based on the mongodb data.
 
 Deployment data can be provided to adelheid in the following ways:
 

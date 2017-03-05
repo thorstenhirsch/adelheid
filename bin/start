@@ -1,10 +1,19 @@
 #!/bin/sh
 #
 
-ROOT=$HOME/src/adelheid
+ROOT="$HOME/src/adelheid"
+
 MONGO=mongod
+LOCK="$ROOT/mongodb_data/mongod.lock"
 
-echo "starting mongodb..."
-$MONGO --dbpath $ROOT/mongodb_data --logpath $ROOT/log/mongo.log --pidfilepath $ROOT/tmp/mongo.pid --fork
+if [ -f "$LOCK" ] && lsof "$LOCK" >/dev/null && [ $? == 0 ]; then
+    echo "mongodb already running."
+else
+    echo "starting mongodb..."
+    $MONGO --dbpath $ROOT/mongodb_data --logpath $ROOT/log/mongo.log --pidfilepath $ROOT/tmp/mongo.pid --fork
+fi
 
+echo "starting rails..."
+cd $ROOT
+rails s
 

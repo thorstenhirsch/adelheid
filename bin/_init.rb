@@ -3,7 +3,7 @@
 # don't execute this
 # it's meant to be required by ruby scripts
 
-RAILS = File.expand_path("#{File.dirname(__FILE__)}/../rails")
+RAILS = File.expand_path("#{File.dirname(__FILE__)}/..")
 
 # load rails environment (includes loading rake and rake tasks)
 require File.expand_path("#{RAILS}/config/application", __FILE__)
