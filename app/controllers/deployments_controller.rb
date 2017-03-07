@@ -4,8 +4,12 @@ class DeploymentsController < ApplicationController
   # GET /deployments
   # GET /deployments.json
   def index
-    @deployments = Deployment.all
     @environment_groups = EnvironmentGroup.all
+    @environments = Environment.all
+    @deployments = Deployment.all
+    # @environment_groups = EnvironmentGroup.joins(:environments)
+    #                                       .order('environments.number')
+    #                                       .all
   end
 
   # GET /deployments/1

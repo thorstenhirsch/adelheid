@@ -97,13 +97,23 @@ ActiveRecord::Schema.define(version: 20161120115331) do
     t.text     "notes"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.string   "Schnittstelle"
+    t.string   "interface"
+    t.string   "deployer"
+    t.string   "developer"
+    t.string   "change_id"
+    t.index ["Schnittstelle"], name: "index_deployments_on_Schnittstelle"
     t.index ["application_id", "environment_id"], name: "index_deployments_on_application_id_and_environment_id"
     t.index ["application_id"], name: "index_deployments_on_application_id"
     t.index ["artifact_id", "artifact_version_id", "environment_id"], name: "index_deployments_on_artifact_artifactversion_environment", unique: true
     t.index ["artifact_id", "artifact_version_id"], name: "index_deployments_on_artifact_id_and_artifact_version_id"
     t.index ["artifact_id", "environment_id"], name: "index_deployments_on_artifact_id_and_environment_id"
     t.index ["artifact_id"], name: "index_deployments_on_artifact_id"
+    t.index ["change_id"], name: "index_deployments_on_change_id"
+    t.index ["deployer"], name: "index_deployments_on_deployer"
+    t.index ["developer"], name: "index_deployments_on_developer"
     t.index ["environment_id"], name: "index_deployments_on_environment_id"
+    t.index ["interface"], name: "index_deployments_on_interface"
   end
 
   create_table "environment_groups", force: :cascade do |t|

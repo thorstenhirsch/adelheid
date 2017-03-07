@@ -3,7 +3,7 @@
   developer: "xn09789",
   deployer: "xn05725",
   hostname: "dfvviseaibrk1",
-  environment: "INT",
+  environment: "INT_A",
   files: [
       { name: "sapbp2xxx_foo.lnx", 
         path: "/itx/maps/sapbp2xxx_foo/", 

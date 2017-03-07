@@ -12,7 +12,8 @@ class DeploymentMongo < ApplicationMongoRecord
   end
 
   def self.find(id)
-    @@collection.find(_id: BSON::ObjectId(id)).first #TODO: not good programming
+    id = BSON::ObjectId(id) unless id.is_a? BSON::ObjectId
+    @@collection.find(_id: id).first #TODO: what if multiple? impossible (I think)
   end
 
   def data
@@ -36,6 +37,7 @@ class DeploymentMongo < ApplicationMongoRecord
     end
 
     puts "mongo_id: #{@mongo_id}"
-    DeploymentJob.perform_later(mongo_id: @mongo_id)
+    #DeploymentJob.perform_later(mongo_id: @mongo_id)
+    DeploymentJob.new.perform(mongo_id: @mongo_id)
   end
 end

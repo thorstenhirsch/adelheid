@@ -1,19 +1,30 @@
 #!/bin/sh
-#
 
 ROOT="$HOME/src/adelheid"
 
+### MONGODB ###
 MONGO=mongod
 LOCK="$ROOT/mongodb_data/mongod.lock"
 
-if [ -f "$LOCK" ] && lsof "$LOCK" >/dev/null && [ $? == 0 ]; then
-    echo "mongodb already running."
-else
+if [ -f "$LOCK" ]; then
+    if lsof "$LOCK" >/dev/null && [ $? == 0 ]; then
+        echo "mongodb already running."
+    else
+        rm -f "$LOCK"
+        echo "mongodb has not shutdown cleanly, lock file removed."
+    fi
+fi
+
+if [ ! -f "$LOCK" ]; then
     echo "starting mongodb..."
     $MONGO --dbpath $ROOT/mongodb_data --logpath $ROOT/log/mongo.log --pidfilepath $ROOT/tmp/mongo.pid --fork
 fi
 
+### MYSQL ###
+#ToDo: everything
+
+### RAILS ###
+#ToDo: current commands are for dev environment only...?
 echo "starting rails..."
 cd $ROOT
 rails s
-

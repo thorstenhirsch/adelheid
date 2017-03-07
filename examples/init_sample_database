@@ -60,8 +60,11 @@ rake "property:update", name: "developer", number: 10
 rake "property:update", name: "deployer", number: 20
 # the attribute called "change_id" has number 3
 
+rake "artifact_category:add", name: "file"
+rake "artifact_category:add", name: "db"
+
 rake "artifact_type:add", name: "map", category: "file"
-rake "artifact_type:update", name: "map", searchable: "name" # build INDEX
+rake "artifact_type:update", name: "map", searchable: "name"
 
 rake "artifact_type:add", name: "mdq", category: "file"
 

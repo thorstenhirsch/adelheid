@@ -6,7 +6,8 @@
             </div>
         </div>
         <div class="row">
-          <% eg.environments.each do |e| %>
+          <% eg_only = -> e { e.environment_group_id == eg.id }
+             @environments.select(&eg_only).sort_by(&:number).each do |e| %>
             <div class="col-md-12 environment">
                 <h2><%= e.name %></h2>
                 <div class="table-responsive">
@@ -25,8 +26,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <% @deployments.each do |d| %>
-                            <% next unless d.environment == e %>
+                          <% e_only = -> d { d.environment == e }
+                             @deployments.select(&e_only).sort_by(&:timestamp).reverse.each do |d| %>
                             <tr>
                               <% @ui_columns.each do |c| %>
                                 <td><%= d[c.name] %></td>
