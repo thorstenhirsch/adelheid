@@ -1,5 +1,7 @@
 class DeploymentMongo < ApplicationMongoRecord
 
+  include Extractable
+
   @@collection = $mongo_client[:deployments]
   # or shall we use a class instance variable instead?
 

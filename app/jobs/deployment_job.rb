@@ -17,11 +17,6 @@ class DeploymentJob < ApplicationJob
     raise "mongo_id not found" if doc.nil?
     puts "DOC: #{doc}" ###
 
-    xml = Nokogiri::XML(doc.to_xml(root: :deployment, skip_instruct: true, indent: 0)) # haven't found a solution without root element
-    raise "internal error: couldn't convert bson to xml" if xml.nil?
-    puts "XML: #{xml}" ###
-
-
     # now fetch all configured fields from doc
     # 1.) if there's a xpath path expression to fetch it -> use it
     # 2.) look into /
@@ -42,49 +37,7 @@ class DeploymentJob < ApplicationJob
       environment: environment
     )
 
-    # dynamic attributes
-    Property.where(application: application)
-              .each do |p|
-      if p.xpath.present?
-        # user input -> can fail
-        begin
-          fixed = fix_xpath(p.xpath) # user's xpath is without /deployment root
-          value = xml.xpath(fixed)
-          value = value.text() unless value.is_a? String
-          puts "searched for #{fixed}, found: #{value}" ###
-        rescue => e
-          puts "ERROR: dynamic property failed, xpath: #{p.xpath}, fixed: #{fixed}, msg: #{e.message}"
-          next
-        end
-      else
-        value = xml.at_xpath("/deployment/#{p.name}").try(:text)
-        puts "searched for /deployment/#{p.name} in /#{xml.name}, found: #{value}" ###
-      end
-
-      next unless value.present?
-
-      begin
-        # assignment with send, the '=' is part of the symbol's name
-        deployment.send("#{p.name}=".to_sym, value)
-      rescue => e
-        puts "ERROR: property #{p.name} found, but deployment has no such attribute, msg: #{e.message}"
-      end
-    end
-
-    # at the end build all fields with a proc
-    # -> can use all previously fetched fields
-    #proc_fields = [
-    #   { name: "Schnittstelle",
-    #     number: 10,
-    #     proc: "#{srcsysid} / #{msgtype}" }
-    #]
-
-    artifacts = xml.xpath("/deployment/artifacts")
-    artifacts.each do |a|
-      artifact_name = a.xpath("/name").text
-      artifact = Artifact.find_or_create_by(name: artifact_name)
-      deployment.artifacts << artifact
-    end
+    doc.extract_to(deployment)
 
     # finally we've got everything we need
     deployment.save!
@@ -92,15 +45,5 @@ class DeploymentJob < ApplicationJob
     # also trigger statistics update
     # -> how many deployments in which environment (_group)
     # -> dployments timeline
-  end
-
-  private
-
-  def fix_xpath(xpath)
-    # everything that begins with a slash except when a slash is before the slash
-    xpath.gsub %r{(?![^/])(/[\w]+)}, '/deployment\1'
-    # actually I tried to implement a "lookbehind no slash", (?:[^/])
-    # but that didn't work out, it dismissed the char before the / in \1
-    # now what seems to work is a negative lookahead, (?![^/])
   end
 end

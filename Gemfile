@@ -2,10 +2,11 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.1.0'
 # persistency:
 gem 'mysql2'
 gem 'mongo' # mongo is the basic driver, mongoid a complete orm like ActiveRecord
+gem 'crate_ruby' # crate_ruby is the basic driver
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
@@ -42,7 +43,6 @@ gem 'sucker_punch', '~> 2.0'
 
 # bootstrap (no need to use bootstrap-sass anymore, because sass is now the default)
 gem 'bootstrap', '~> 4.0.0.alpha6'
-gem 'chart-js-rails'
 gem 'tether-rails'
 
 # reactjs & some more js
@@ -51,6 +51,9 @@ gem 'lodash-rails'
 
 # query mongodb with graphql
 #gem 'graphql'
+
+# statistic charts
+gem 'chart-js-rails'
 
 # for some mocks, this one should be removed later
 gem 'hashie'

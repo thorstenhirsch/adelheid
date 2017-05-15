@@ -3,19 +3,29 @@
 
 # PID files...
 ROOT=$HOME/src/adelheid
-MONGOPID=$ROOT/tmp/mongo.pid
+#MONGOPID=$ROOT/tmp/mongo.pid
 MONGOLOG=$ROOT/log/mongo.log
+LOCK="$ROOT/mongodb_data/mongod.lock"
 
-PID=`cat $MONGOPID`
-printf "stopping mongodb process $PID."
-kill $PID
-while [ 1 ]; do
-    printf "."
-    sleep 1
-    tail $MONGOLOG | grep -q dbexit
-    [ $? == 0 ] && break
-done
-printf "ok.\n"
+if [ -f "$LOCK" ]; then
+    PID=$(lsof -t "$LOCK")
+    if [ $PID ]; then
+        printf "stopping mongodb process $PID."
+        kill $PID
+        while [ 1 ]; do
+            printf "."
+            sleep 1
+            tail $MONGOLOG | grep -q "shutting down with code" #dbexit
+            [ $? == 0 ] && break
+        done
+        printf "ok.\n"
+    else
+        echo "mongodb has not shutdown cleanly, lock file removed."
+    fi
+    rm -f "$LOCK"
+else
+    echo "mongodb not running."
+fi
 
 exit 0
 
