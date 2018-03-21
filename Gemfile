@@ -6,7 +6,6 @@ gem 'rails', '~> 5.1.0'
 # persistency:
 gem 'mysql2'
 gem 'mongo' # mongo is the basic driver, mongoid a complete orm like ActiveRecord
-gem 'crate_ruby' # crate_ruby is the basic driver
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
